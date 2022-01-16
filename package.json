@@ -1,0 +1,33 @@
+{
+  "name": "NODEJS-loging",
+  "version": "1.0.0",
+  "description": "Learning nodejs by writing a web with loging feature",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vabarca/NODEJS-loging.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vabarca/NODEJS-loging/issues"
+  },
+  "homepage": "https://github.com/vabarca/NODEJS-loging#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "^0.0.3",
+    "connect-flash": "^0.1.1",
+    "ejs-mate": "^3.0.0",
+    "express": "^4.17.2",
+    "mongoose": "^6.1.6",
+    "morgan": "^1.10.0",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
