@@ -1,5 +1,5 @@
 {
-  "name": "NODEJS-loging",
+  "name": "nodejs-loging",
   "version": "1.0.0",
   "description": "Learning nodejs by writing a web with loging feature",
   "main": "index.js",
@@ -17,17 +17,15 @@
     "url": "https://github.com/vabarca/NODEJS-loging/issues"
   },
   "homepage": "https://github.com/vabarca/NODEJS-loging#readme",
-  "dependencies": {
-    "bcrypt-nodejs": "^0.0.3",
-    "connect-flash": "^0.1.1",
-    "ejs-mate": "^3.0.0",
-    "express": "^4.17.2",
-    "mongoose": "^6.1.6",
-    "morgan": "^1.10.0",
-    "passport": "^0.5.2",
-    "passport-local": "^1.0.0"
-  },
   "devDependencies": {
     "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^12.0.4",
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "express-session": "^1.17.2",
+    "sqlite3": "^5.0.2"
   }
 }
