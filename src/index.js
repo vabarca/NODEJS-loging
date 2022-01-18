@@ -11,7 +11,7 @@ const dotenv = require('dotenv');
 dotenv.config({path: './env/.env'});
 
 //4 - Seteamos el directorio public
-app.use('/resources', express.static('public'));
+//app.use('/resources', express.static('public'));
 app.use('/resources', express.static(__dirname + '/public'));
 
 //5 - Establecemos el motor de pantallas ejs
@@ -23,10 +23,12 @@ const bcryptjs = require('bcryptjs');
 //7 - Invocamos la sesion
 const session = require('express-session');
 app.use(session({
-    secret: 'secret',
+    secret: 'power',
     resave: true,
     saveUninitialized: true,
 }));
+
+const db = require('./db/db');
 
 app.get('/', (req, res) => {
     res.send('hola amegos!!');
