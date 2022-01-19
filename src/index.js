@@ -4,7 +4,7 @@ const app = express();
 
 //2 - Seteamos urlencoded para capturar los datos del formulario
 app.use(express.urlencoded({extended:false}));
-app.use(express.json);
+//app.use(express.json);
 
 //3 - Invocamos a dotenv
 const dotenv = require('dotenv');
@@ -15,6 +15,8 @@ dotenv.config({path: './env/.env'});
 app.use('/resources', express.static(__dirname + '/public'));
 
 //5 - Establecemos el motor de pantallas ejs
+const path = require('path');
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 //6 - Invocamos a bcryptjs
@@ -28,10 +30,15 @@ app.use(session({
     saveUninitialized: true,
 }));
 
+//8 - Invocamos al módulo de conexión de la BD
 const db = require('./db/db');
 
+//9 - Establecinedo las rutas
 app.get('/', (req, res) => {
-    res.send('hola amegos!!');
+    res.render('index', {msg: 'ESTO ES UN MENSAJE DESDE NODE'});
+});
+app.get('/login', (req, res) => {
+    res.render('login');
 });
 
 app.listen(3000, (req, res) => {
