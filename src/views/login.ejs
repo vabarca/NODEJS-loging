@@ -9,12 +9,29 @@
 </head>
 <body>
     <div class="login-form">
-        <h2>NB POD</h2>
+        <h2>Power Electronics</h2>
         <form action="auth" method="post">
             <input type="text" name="user" id="user" placeholder="User" required>
             <input type="password" name="pass" id="pass" placeholder="Password" required>
             <input type="submit" class="btn-login" value="Login">
         </form>
     </div>
+
+    <script src="sweetalert2.all.min.js"></script>
+
+    <% if(typeof alert != "undefined") { %>
+        <script>
+            Swal.fire({
+                title: '<%= alertTitle %>',
+                text: '<%= alertMessage %>',
+                icon: '<%= alertIcon %>',
+                showConfirmButton: <%= showConfirmButton %>,
+                timer: <%= timer %>
+            }).them(()=>{
+                window.location='/<%= ruta %>'
+            })
+        </script>
+    <% } %>
+
 </body>
 </html>
