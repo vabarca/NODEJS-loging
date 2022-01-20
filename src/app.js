@@ -35,83 +35,80 @@ const db = require('./db/db');
 const { Console } = require('console');
 
 //9 - Establecinedo las rutas
-app.get('/', (req, res) => {
-    res.render('index', {msg: 'ESTO ES UN MENSAJE DESDE NODE'});
-});
-
 app.get('/login', (req, res) => {
     res.render('login');
 });
 
-//10 - Implementamos el metodo post del login
+//10 - Metodo para la autenticacion
 app.post('/auth', async (req, res)=> {
     const user = req.body.user;
     const pass = req.body.pass;
 
-    if(!user || !pass){
-        return console.log('Undefined field');
-    }
-
     let sql_get = "SELECT * FROM users WHERE user = ?";
-    db.get(sql_get, [user] , (error, result)=>{
-        if(error){
-            return console.log("Error accediendo a la base de datos")
+    db.get(sql_get, [user] , async (error, data)=>{
+        console.log(data.user, data.pass);
+        if(data && await bcryptjs.compare(pass, data.pass)){
+            //Grant access
+            req.session.loggedin = true;
+            req.session.name = data.user;
+            res.render('login',{
+                alert:true,
+                alertTitle:"Success",
+                alertMessage:"¡Wellcome " + data.user + "!" ,
+                alertIcon: 'success',
+                showConfirmButton:false,
+                timer:1500,
+                ruta: ''
+            });
+        } else {
+            //Deny access
+            res.render('login',{
+                alert:true,
+                alertTitle:"Error",
+                alertMessage:"Wrong user and/or password",
+                alertIcon: 'error',
+                showConfirmButton:true,
+                timer:false,
+                ruta: 'login'
+            });
         }
- 
-        if(result){
-            console.log(result.user, result.pass);
-
-            let rslt = true;//await bcryptjs.compare(result.pass, pass); 
-
-            if(rslt){
-                //Grant access
-                req.session.name = result.user;
-                res.render('login',{
-                    alert:true,
-                    alertTitle:'Conexión correcta',
-                    alertMessage:'LOGIN CORRECTO',
-                    alertIcon: 'success',
-                    showConfirmButton:false,
-                    timer:1500,
-                    ruta: ''
-                });
-            }
-            else{
-                //Deny access
-                res.render('login',{
-                    alert:true,
-                    alertTitle:'Error',
-                    alertMessage:'Usuario y/o password incorrectas',
-                    alertIcon: 'error',
-                    showConfirmButton:true,
-                    timer:false,
-                    ruta: 'login'
-                });
-            }
-        }
-        else{
-            if(user == 'pe'){
-                let passHash = await(bcryptjs.hash(pass, 8))
-                //create password
-                return db.serialize(function(){
-                    let sql_insert = 'INSERT INTO users(user,pass) VALUES(?,?)';
-                    db.run(sql_insert,[user, passHash], (error)=>{
-                        if(error){
-                            return console.log(error.message);
-                        }
-                        
-                        return console.log("User 'pe' added");
-                    });
-                });
-            }
-            else{
-
-            }
-        }        
+        res.end();
     });
+   
 });
 
+//11 - Método para controlar que está auth en todas las páginas
+app.get('/', (req, res) => {
+    if (req.session.loggedin) {
+		res.render('index',{
+			login: true,
+			name: req.session.name			
+		});		
+	} else {
+		res.render('index',{
+			login:false,
+			name:'',			
+		});				
+	}
+	res.end();
+});
+
+//función para limpiar la caché luego del logout
+app.use(function(req, res, next) {
+    if (!req.user)
+        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    next();
+});
+
+ //Logout
+//Destruye la sesión.
+app.get('/logout', function (req, res) {
+	req.session.destroy(() => {
+	  res.redirect('/') // siempre se ejecutará después de que se destruya la sesión
+	})
+});
 
 app.listen(3000, (req, res) => {
     console.log('Servidor running in localhost:3000');
 });
+

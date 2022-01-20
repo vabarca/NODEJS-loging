@@ -1,10 +1,11 @@
 body{
     background-color: #f5f5f5;
-    font-family: roboto;
+    font-family: 'Roboto';
     margin: auto;
     text-align: center;
 }
 
+/* Login form */
 .login-form, .contenedor{
     width: 300px;
     margin: 0 auto;
@@ -26,6 +27,7 @@ body{
     box-sizing: border-box;
 }
 
+/* Estilos boton LOGIN*/
 .btn-login{
     width: 100%;
     padding: 15px;
@@ -46,4 +48,36 @@ body{
 
 .btn-login:focus{
     box-shadow: 0 0 0 3px rgba(121, 82 , 179, 0.25);
+}
+
+/* Estilos de link para ir a LOGIN*/
+.a-login:link, .a-login:visited {
+    background-color: white;
+    color: black;
+    border: 2px solid #10B981;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+  
+.a-login:hover, .a-login:active {
+    background-color: #10B981;
+    color: white;
+}
+  
+  /* Estilos de link para realizar el LOGOUT*/
+.a-logout:link, .a-logout:visited {
+    background-color: white;
+    color: black;
+    border: 2px solid #F87171;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+  
+.a-logout:hover, .a-logout:active {
+    background-color: #F87171;
+    color: white;
 }
