@@ -6,10 +6,6 @@ const app = express();
 app.use(express.urlencoded({extended:false}));
 //app.use(express.json);
 
-//3 - Invocamos a dotenv
-const dotenv = require('dotenv');
-dotenv.config({path: './env/.env'});
-
 //4 - Seteamos el directorio public
 //app.use('/resources', express.static('public'));
 app.use('/resources', express.static(__dirname + '/public'));
@@ -44,38 +40,41 @@ app.post('/auth', async (req, res)=> {
     const user = req.body.user;
     const pass = req.body.pass;
 
-    let sql_get = "SELECT * FROM users WHERE user = ?";
-    db.get(sql_get, [user] , async (error, data)=>{
-        let granted = await bcryptjs.compare(pass, data.pass);
-        console.log(data.user, data.pass, granted);
-        if(data && granted){
-            //Grant access
-            req.session.loggedin = true;
-            req.session.name = data.user;
-            res.render('login',{
-                alert:true,
-                alertTitle:"Success",
-                alertMessage:"¡Wellcome " + data.user + "!" ,
-                alertIcon: 'success',
-                showConfirmButton:false,
-                timer:1500,
-                ruta: ''
-            });
-        } else {
-            //Deny access
-            res.render('login',{
-                alert:true,
-                alertTitle:"Error",
-                alertMessage:"Wrong user and/or password",
-                alertIcon: 'error',
-                showConfirmButton:true,
-                timer:false,
-                ruta: 'login'
-            });
-        }
-        res.end();
-    });
-   
+    try {
+        let sql_get = "SELECT * FROM users WHERE user = ?";
+        db.get(sql_get, [user] , async (error, data)=>{
+            let granted = await bcryptjs.compare(pass, data.pass);
+            if(data && granted){
+                //Grant access
+                req.session.loggedin = true;
+                req.session.name = data.user;
+                res.render('login',{
+                    alert:true,
+                    alertTitle:"Success",
+                    alertMessage:"¡Wellcome " + data.user + "!" ,
+                    alertIcon: 'success',
+                    showConfirmButton:false,
+                    timer:1500,
+                    ruta: ''
+                });
+            } else {
+                //Deny access
+                res.render('login',{
+                    alert:true,
+                    alertTitle:"Error",
+                    alertMessage:"Wrong user and/or password",
+                    alertIcon: 'error',
+                    showConfirmButton:true, 
+                    timer:false,
+                    ruta: 'login'
+                });
+            }
+            res.end();
+        });
+    } catch (e) {
+        console.log("error accedinedo a la DB");
+    } finally {
+    }
 });
 
 //11 - Método para controlar que está auth en todas las páginas
