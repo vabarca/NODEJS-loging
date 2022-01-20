@@ -46,8 +46,9 @@ app.post('/auth', async (req, res)=> {
 
     let sql_get = "SELECT * FROM users WHERE user = ?";
     db.get(sql_get, [user] , async (error, data)=>{
-        console.log(data.user, data.pass);
-        if(data && await bcryptjs.compare(pass, data.pass)){
+        let granted = await bcryptjs.compare(pass, data.pass);
+        console.log(data.user, data.pass, granted);
+        if(data && granted){
             //Grant access
             req.session.loggedin = true;
             req.session.name = data.user;
